@@ -11,9 +11,9 @@
 
 <br>
 
+🎶 **Selecione.**  
 🎧 **Organize.**  
-🎶 **Reproduza.**  
-✨ **Escute.**
+✨ **Reproduza.**
 
 </div>
 
@@ -50,7 +50,7 @@ A aplicação permite que o usuário organize suas músicas favoritas, crie play
 
 O principal objetivo do **Echo Music** é desenvolver uma plataforma de música para desktop que permita ao usuário **centralizar e organizar sua experiência musical** em um único ambiente.
 
-A aplicação busca facilitar tarefas como:
+A aplicação busca realizar tarefas como:
 
 1. 👤 Cadastrar-se no sistema;
 2. 🔐 Fazer login;
@@ -65,7 +65,7 @@ A aplicação busca facilitar tarefas como:
 
 ---
 
-# ✨ Funcionalidades
+# ⚙️ Funcionalidades
 
 <table>
 <tr>
