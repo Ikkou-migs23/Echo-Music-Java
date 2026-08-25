@@ -9,6 +9,7 @@ public class TelaCadastro {
 
         JFrame janela = new JFrame("Echo Music - Criar sua Conta");
 
+        janela.setResizable(false);
         janela.setSize(640, 390);
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         janela.setLocationRelativeTo(null);
