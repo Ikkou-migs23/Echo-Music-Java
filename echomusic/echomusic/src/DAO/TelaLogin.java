@@ -67,7 +67,7 @@ public class TelaLogin {
         painel.add(labelUsuario, gbc);
 
 
-        JTextField campoUsuario = new JTextField("usuario@email.com");
+        JTextField campoUsuario = new JTextField("");
         campoUsuario.setPreferredSize(new Dimension(273, 22));
         campoUsuario.setFont(new Font("Arial", Font.PLAIN, 11));
 
