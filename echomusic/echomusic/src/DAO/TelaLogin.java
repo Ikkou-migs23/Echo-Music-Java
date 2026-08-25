@@ -7,8 +7,9 @@ public class TelaLogin {
 
     public static void main(String[] args) {
 
-        JFrame janela = new JFrame("Echo Music - Acessar sua Conta");
+        JFrame janela = new JFrame("Echo Music - Acessar Conta");
 
+        janela.setResizable(false);
         janela.setSize(640, 390);
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         janela.setLocationRelativeTo(null);
