@@ -12,8 +12,8 @@
 <br>
 
 🎶 **Selecione.**  
-🎧 **Organize.**  
-✨ **Reproduza.**
+📂 **Organize.**  
+🎧 **Reproduza.**
 
 </div>
 
