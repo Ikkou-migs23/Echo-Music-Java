@@ -15,7 +15,7 @@ public class TelaLogout {
         JPanel painel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
-        JLabel titulo = new JLabel("Sair do ECHO MUSIC?");
+        JLabel titulo = new JLabel("Sair do ECHO MUSIC");
         titulo.setFont(new Font("Arial", Font.BOLD, 15));
 
         gbc.gridx = 1;
