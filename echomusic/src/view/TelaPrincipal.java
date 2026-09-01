@@ -2,6 +2,11 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.List;
+import model.Musica;
 
 public class TelaPrincipal {
 
@@ -10,6 +15,10 @@ public class TelaPrincipal {
     private static final Color BORDA = new Color(220, 223, 228);
 
     public static void main(String[] args) {
+        abrir();
+    }
+
+    public static void abrir() {
         JFrame janela = new JFrame("Echo Music - Sua Biblioteca");
         janela.setSize(900, 600);
         janela.setResizable(false);
@@ -18,7 +27,24 @@ public class TelaPrincipal {
 
         JPanel principal = new JPanel(new BorderLayout());
         principal.setBackground(FUNDO);
-        principal.add(new BarraLateral("Playlists"), BorderLayout.WEST);
+
+        BarraLateral barraLateral = new BarraLateral("Playlists");
+        barraLateral.aoClicar(tela -> {
+            switch (tela) {
+                case "Home":
+                case "Playlists":
+                    // já estamos na Sua Biblioteca, não faz nada
+                    break;
+                case "Perfil":
+                    // TODO: janela.dispose(); new TelaPerfil().setVisible(true);
+                    break;
+                case "Sobre":
+                    // TODO: janela.dispose(); new TelaSobre().setVisible(true);
+                    break;
+            }
+        });
+
+        principal.add(barraLateral, BorderLayout.WEST);
         principal.add(criarConteudo(), BorderLayout.CENTER);
         principal.add(criarPlayer(), BorderLayout.SOUTH);
 
@@ -106,31 +132,49 @@ public class TelaPrincipal {
         cards.setBackground(FUNDO);
 
         cards.add(criarPlaylist(
-                "Rock 90s", "50 músicas",
-                new Color(65, 35, 35), "ROCK\n90s"
+                "Rock 90s", new Color(65, 35, 35), "ROCK\n90s",
+                Arrays.asList(
+                        new Musica("Smells Like Teen Spirit", "5:01"),
+                        new Musica("Livin' on a Prayer", "4:09"),
+                        new Musica("Under the Bridge", "4:24"),
+                        new Musica("Wonderwall", "4:18")
+                )
         ));
 
         cards.add(criarPlaylist(
-                "Treino Pesado", "32 músicas",
-                new Color(55, 55, 55), "TREINO"
+                "Treino Pesado", new Color(55, 55, 55), "TREINO",
+                Arrays.asList(
+                        new Musica("Till I Collapse", "4:57"),
+                        new Musica("Eye of the Tiger", "4:04"),
+                        new Musica("Stronger", "5:11")
+                )
         ));
 
         cards.add(criarPlaylist(
-                "Estudo Lo-Fi", "105 músicas",
-                new Color(40, 50, 65), "LO-FI"
+                "Estudo Lo-Fi", new Color(40, 50, 65), "LO-FI",
+                Arrays.asList(
+                        new Musica("Rainy Afternoon", "2:41"),
+                        new Musica("Coffee & Focus", "3:02"),
+                        new Musica("Late Night Pages", "2:55"),
+                        new Musica("Quiet Library", "3:14")
+                )
         ));
 
         cards.add(criarPlaylist(
-                "Minha Vibe", "12 músicas",
-                new Color(70, 25, 75), "VIBE"
+                "Minha Vibe", new Color(70, 25, 75), "VIBE",
+                Arrays.asList(
+                        new Musica("Sunset Drive", "3:22"),
+                        new Musica("Palm Trees", "3:45")
+                )
         ));
 
         return cards;
     }
 
     private static JPanel criarPlaylist(
-            String nome, String quantidade,
-            Color cor, String textoCapa) {
+            String nome, Color cor, String textoCapa, List<Musica> musicas) {
+
+        String quantidade = musicas.size() + " músicas";
 
         JPanel card = new JPanel(new BorderLayout(8, 0));
         card.setPreferredSize(new Dimension(245, 85));
@@ -139,6 +183,7 @@ public class TelaPrincipal {
                 BorderFactory.createLineBorder(BORDA),
                 BorderFactory.createEmptyBorder(7, 7, 7, 7)
         ));
+        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         JPanel capa = new JPanel(new GridBagLayout());
         capa.setPreferredSize(new Dimension(65, 65));
@@ -178,6 +223,16 @@ public class TelaPrincipal {
         card.add(capa, BorderLayout.WEST);
         card.add(informacoes, BorderLayout.CENTER);
         card.add(menu, BorderLayout.EAST);
+
+        // clique no card (em qualquer lugar, exceto no botão "...") abre a playlist
+        card.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Window janelaAtual = SwingUtilities.getWindowAncestor(card);
+                if (janelaAtual != null) janelaAtual.dispose();
+                new TelaPlaylist(nome, cor, textoCapa, musicas).setVisible(true);
+            }
+        });
 
         return card;
     }

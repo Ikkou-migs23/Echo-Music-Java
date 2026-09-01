@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.*;
+import java.util.function.Consumer;
 import javax.swing.*;
 
 public class BarraLateral extends JPanel {
@@ -12,6 +13,7 @@ public class BarraLateral extends JPanel {
     private static final Color BORDA = new Color(215, 218, 222);
 
     private JPanel painelMenu;
+    private Consumer<String> aoClicarBotao;
 
     public BarraLateral(String telaSelecionada) {
         setPreferredSize(new Dimension(150, 0));
@@ -25,6 +27,17 @@ public class BarraLateral extends JPanel {
         add(painelMenu, BorderLayout.CENTER);
 
         selecionarTela(telaSelecionada);
+    }
+
+    /**
+     * Define o que acontece quando o usuário clica em um item do menu
+     * (Home, Playlists, Perfil, Sobre). Cada tela que usa a BarraLateral
+     * registra aqui como quer navegar.
+     *
+     * Ex.: barraLateral.aoClicar(tela -> { dispose(); ... });
+     */
+    public void aoClicar(Consumer<String> ouvinte) {
+        this.aoClicarBotao = ouvinte;
     }
 
     private JPanel criarLogo() {
@@ -70,6 +83,11 @@ public class BarraLateral extends JPanel {
         botao.setBorder(BorderFactory.createEmptyBorder(7, 12, 7, 3));
         botao.setMaximumSize(new Dimension(150, 36));
         botao.setAlignmentX(Component.LEFT_ALIGNMENT);
+        botao.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        botao.addActionListener(e -> {
+            if (aoClicarBotao != null) aoClicarBotao.accept(texto);
+        });
 
         return botao;
     }
