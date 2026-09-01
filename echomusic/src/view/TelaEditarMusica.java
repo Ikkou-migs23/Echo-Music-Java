@@ -23,10 +23,17 @@ public class TelaEditarMusica extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+        // =====================================================
         // PAINEL PRINCIPAL
+        // =====================================================
+
         JPanel principal = new JPanel(new BorderLayout());
         principal.setBackground(FUNDO);
 
+        /*
+         * USA DIRETAMENTE A SUA BARRA LATERAL.
+         * Não recriamos o menu aqui.
+         */
         BarraLateral barraLateral = new BarraLateral("Playlists");
 
         principal.add(barraLateral, BorderLayout.WEST);
@@ -35,7 +42,10 @@ public class TelaEditarMusica extends JFrame {
         setContentPane(principal);
     }
 
+    // =========================================================
     // ÁREA PRINCIPAL
+    // =========================================================
+
     private JPanel criarAreaPrincipal() {
 
         JPanel painel = new JPanel(new BorderLayout());
@@ -43,11 +53,15 @@ public class TelaEditarMusica extends JFrame {
 
         painel.add(criarTopo(), BorderLayout.NORTH);
         painel.add(criarFormulario(), BorderLayout.CENTER);
+        painel.add(criarPlayer(), BorderLayout.SOUTH);
 
         return painel;
     }
 
+    // =========================================================
     // TOPO
+    // =========================================================
+
     private JPanel criarTopo() {
 
         JPanel topo = new JPanel(new BorderLayout());
@@ -58,24 +72,44 @@ public class TelaEditarMusica extends JFrame {
             )
         );
 
+        // Busca exatamente no estilo da tela de referência
+        JPanel esquerda = new JPanel(
+            new FlowLayout(FlowLayout.LEFT, 10, 8)
+        );
+        esquerda.setBackground(Color.WHITE);
+
+        JTextField busca = new JTextField();
+        busca.setPreferredSize(new Dimension(270, 27));
+        busca.setFont(new Font("Arial", Font.PLAIN, 12));
+
+        // Simulação do placeholder
+        busca.setText("Buscar Música...");
+        busca.setForeground(new Color(110, 110, 110));
+
+        esquerda.add(busca);
+
         // Botão sair
         JPanel direita = new JPanel(
             new FlowLayout(FlowLayout.RIGHT, 10, 8)
         );
         direita.setBackground(Color.WHITE);
 
-        JButton sair = new JButton("Sair");
+        JButton sair = new JButton("Sair (RH07/CSU03)");
         sair.setFont(new Font("Arial", Font.PLAIN, 10));
         sair.setFocusPainted(false);
 
         direita.add(sair);
 
+        topo.add(esquerda, BorderLayout.WEST);
         topo.add(direita, BorderLayout.EAST);
 
         return topo;
     }
-    
+
+    // =========================================================
     // FORMULÁRIO
+    // =========================================================
+
     private JPanel criarFormulario() {
 
         JPanel area = new JPanel(new BorderLayout());
@@ -86,12 +120,23 @@ public class TelaEditarMusica extends JFrame {
             )
         );
 
+        // -----------------------------------------------------
         // TÍTULO
+        // -----------------------------------------------------
+
         JPanel cabecalho = new JPanel();
         cabecalho.setLayout(
             new BoxLayout(cabecalho, BoxLayout.Y_AXIS)
         );
         cabecalho.setBackground(FUNDO);
+
+        JLabel breadcrumb = new JLabel(
+            "Home  >  Playlists  >  Editar Música"
+        );
+        breadcrumb.setFont(
+            new Font("Arial", Font.PLAIN, 11)
+        );
+        breadcrumb.setForeground(AZUL);
 
         JLabel titulo = new JLabel("Editar Música");
         titulo.setFont(
@@ -104,12 +149,16 @@ public class TelaEditarMusica extends JFrame {
                 7, 0, 15, 0
             )
         );
-        
+
+        cabecalho.add(breadcrumb);
         cabecalho.add(titulo);
 
         area.add(cabecalho, BorderLayout.NORTH);
 
+        // -----------------------------------------------------
         // CONTEÚDO
+        // -----------------------------------------------------
+
         JPanel conteudo = new JPanel(
             new BorderLayout(20, 0)
         );
@@ -120,7 +169,10 @@ public class TelaEditarMusica extends JFrame {
 
         area.add(conteudo, BorderLayout.CENTER);
 
+        // -----------------------------------------------------
         // BOTÕES
+        // -----------------------------------------------------
+
         JPanel botoes = new JPanel(
             new FlowLayout(FlowLayout.RIGHT, 8, 5)
         );
@@ -135,7 +187,7 @@ public class TelaEditarMusica extends JFrame {
             new Dimension(82, 29)
         );
 
-        JButton salvar = new JButton("SALVAR");
+        JButton salvar = new JButton("SALVAR (CSU12)");
         salvar.setFont(
             new Font("Arial", Font.BOLD, 11)
         );
@@ -159,7 +211,10 @@ public class TelaEditarMusica extends JFrame {
         return area;
     }
 
+    // =========================================================
     // CAPA
+    // =========================================================
+
     private JPanel criarCapa() {
 
         JPanel painel = new JPanel();
@@ -249,7 +304,10 @@ public class TelaEditarMusica extends JFrame {
         return painel;
     }
 
+    // =========================================================
     // CAMPOS
+    // =========================================================
+
     private JPanel criarCampos() {
 
         JPanel painel = new JPanel();
@@ -277,7 +335,10 @@ public class TelaEditarMusica extends JFrame {
             "Digite o álbum..."
         );
 
+        // -----------------------------------------------------
         // Categoria
+        // -----------------------------------------------------
+
         JPanel categoria = new JPanel(
             new BorderLayout(0, 5)
         );
@@ -403,7 +464,172 @@ public class TelaEditarMusica extends JFrame {
         return texto;
     }
 
+    // =========================================================
+    // PLAYER — MESMO PADRÃO DA REFERÊNCIA
+    // =========================================================
+
+    private JPanel criarPlayer() {
+
+        JPanel player = new JPanel(
+            new BorderLayout()
+        );
+
+        player.setBackground(Color.WHITE);
+
+        player.setPreferredSize(
+            new Dimension(0, 60)
+        );
+
+        player.setBorder(
+            BorderFactory.createMatteBorder(
+                1, 0, 0, 0, BORDA
+            )
+        );
+
+        // -----------------------------------------------------
+        // Música
+        // -----------------------------------------------------
+
+        JPanel musica = new JPanel(
+            new FlowLayout(
+                FlowLayout.LEFT, 10, 9
+            )
+        );
+
+        musica.setBackground(Color.WHITE);
+
+        JLabel icone = new JLabel("♫");
+        icone.setHorizontalAlignment(
+            SwingConstants.CENTER
+        );
+
+        icone.setFont(
+            new Font("Arial", Font.BOLD, 19)
+        );
+
+        icone.setForeground(
+            new Color(120, 120, 120)
+        );
+
+        icone.setOpaque(true);
+        icone.setBackground(
+            new Color(235, 236, 238)
+        );
+
+        icone.setPreferredSize(
+            new Dimension(38, 38)
+        );
+
+        JLabel musicaAtual = new JLabel(
+            "<html><b>Nenhuma música selecionada</b>"
+            + "<br><font color='#777777'>-- / --</font></html>"
+        );
+
+        musicaAtual.setFont(
+            new Font("Arial", Font.PLAIN, 10)
+        );
+
+        musica.add(icone);
+        musica.add(musicaAtual);
+
+        player.add(
+            musica,
+            BorderLayout.WEST
+        );
+
+        // -----------------------------------------------------
+        // Controles
+        // -----------------------------------------------------
+
+        JPanel controles = new JPanel(
+            new FlowLayout(
+                FlowLayout.CENTER, 7, 15
+            )
+        );
+
+        controles.setBackground(Color.WHITE);
+
+        controles.add(criarBotaoPlayer("|<"));
+        controles.add(criarBotaoPlayer(">"));
+        controles.add(criarBotaoPlayer("||"));
+        controles.add(criarBotaoPlayer(">|"));
+
+        player.add(
+            controles,
+            BorderLayout.CENTER
+        );
+
+        // -----------------------------------------------------
+        // Volume
+        // -----------------------------------------------------
+
+        JPanel volume = new JPanel(
+            new FlowLayout(
+                FlowLayout.RIGHT, 8, 13
+            )
+        );
+
+        volume.setBackground(Color.WHITE);
+
+        JLabel textoVolume = new JLabel("Volume");
+
+        textoVolume.setFont(
+            new Font("Arial", Font.PLAIN, 11)
+        );
+
+        JSlider slider = new JSlider(
+            0, 100, 70
+        );
+
+        slider.setPreferredSize(
+            new Dimension(90, 22)
+        );
+
+        JButton mais = new JButton("...");
+
+        mais.setPreferredSize(
+            new Dimension(28, 24)
+        );
+
+        mais.setMargin(
+            new Insets(0, 0, 0, 0)
+        );
+
+        volume.add(textoVolume);
+        volume.add(slider);
+        volume.add(mais);
+
+        player.add(
+            volume,
+            BorderLayout.EAST
+        );
+
+        return player;
+    }
+
+    private JButton criarBotaoPlayer(
+        String texto
+    ) {
+
+        JButton botao = new JButton(texto);
+
+        botao.setPreferredSize(
+            new Dimension(34, 23)
+        );
+
+        botao.setMargin(
+            new Insets(0, 0, 0, 0)
+        );
+
+        botao.setFocusPainted(false);
+
+        return botao;
+    }
+
+    // =========================================================
     // AÇÕES
+    // =========================================================
+
     private void selecionarImagem() {
 
         JFileChooser chooser =
@@ -445,7 +671,10 @@ public class TelaEditarMusica extends JFrame {
         dispose();
     }
 
+    // =========================================================
     // MAIN
+    // =========================================================
+
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {
