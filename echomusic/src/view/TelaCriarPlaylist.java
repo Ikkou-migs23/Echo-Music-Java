@@ -93,7 +93,7 @@ public class TelaCriarPlaylist extends JFrame {
         alinhador.setBackground(BRANCO);
         alinhador.add(campoBuscaWrapper);
 
-        JButton botaoSair = new JButton("Sair");
+        JButton botaoSair = new JButton("X");
         botaoSair.setFont(new Font("Arial", Font.PLAIN, 12));
         botaoSair.setForeground(BRANCO);
         botaoSair.setBackground(new Color(200, 80, 80));
@@ -108,7 +108,7 @@ public class TelaCriarPlaylist extends JFrame {
     // ---------- Breadcrumb + Título ----------
 
     private JLabel criarBreadcrumb() {
-        JLabel label = new JLabel("Home > Playlists > Nova Playlist");
+        JLabel label = new JLabel("");
         label.setFont(new Font("Arial", Font.PLAIN, 12));
         label.setForeground(AZUL);
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -156,7 +156,7 @@ public class TelaCriarPlaylist extends JFrame {
         coluna.setBackground(FUNDO);
         coluna.setBorder(new EmptyBorder(0, 0, 0, 32));
 
-        JLabel rotulo = criarRotulo("Capa (RF20)");
+        JLabel rotulo = criarRotulo("");
         rotulo.setBorder(new EmptyBorder(0, 0, 5, 0));
         coluna.add(rotulo);
         coluna.add(criarPainelUploadCapa());
@@ -238,7 +238,7 @@ public class TelaCriarPlaylist extends JFrame {
         coluna.setBackground(FUNDO);
 
         campoNome = criarCampoTexto("Digite o nome...");
-        coluna.add(criarGrupoCampo("Nome da Playlist (RF17)", campoNome, 32));
+        coluna.add(criarGrupoCampo("Nome da Playlist", campoNome, 32));
 
         campoDescricao = new JTextArea(3, 1);
         campoDescricao.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -249,7 +249,7 @@ public class TelaCriarPlaylist extends JFrame {
 
         JScrollPane scrollDescricao = new JScrollPane(campoDescricao);
         scrollDescricao.setBorder(BorderFactory.createLineBorder(BORDA, 1, true));
-        coluna.add(criarGrupoCampo("Descrição (RF18)", scrollDescricao, 90));
+        coluna.add(criarGrupoCampo("Descrição", scrollDescricao, 90));
 
         campoCategoria = new JComboBox<>(new String[] {
                 "Selecione...", "Rock", "Pop", "Eletrônica", "Lo-Fi", "Treino", "Sertanejo"
@@ -257,7 +257,7 @@ public class TelaCriarPlaylist extends JFrame {
         campoCategoria.setFont(new Font("Arial", Font.PLAIN, 13));
         campoCategoria.setBackground(BRANCO);
         campoCategoria.setBorder(BorderFactory.createLineBorder(BORDA, 1, true));
-        coluna.add(criarGrupoCampo("Categoria (RF19)", campoCategoria, 32));
+        coluna.add(criarGrupoCampo("Categoria", campoCategoria, 32));
 
         return coluna;
     }
