@@ -2,11 +2,10 @@
 
 # 🎵 Echo Music
 
-### Sua música. Sua playlist. Seu jeito.
+### Sua música. Sua playlist.
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Desktop](https://img.shields.io/badge/Desktop-Application-6C63FF?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow?style=for-the-badge)
 ![Projeto Acadêmico](https://img.shields.io/badge/Projeto-Acadêmico-blue?style=for-the-badge)
 
 <br>
@@ -33,9 +32,9 @@ A aplicação permite que o usuário organize suas músicas favoritas, crie play
 
 <div align="center">
 
-| 🎓 Projeto | 💻 Tecnologia | 🏫 Instituição | 🚧 Status |
+| 🎓 Projeto | 💻 Tecnologia | 🏫 Instituição
 |:---:|:---:|:---:|:---:|
-| Echo Music | Java | IF Goiano | Em desenvolvimento |
+| Echo Music | Java | IF Goiano
 
 </div>
 
@@ -57,11 +56,9 @@ A aplicação busca realizar tarefas como:
 3. 🏠 Acessar a página inicial;
 4. 📂 Visualizar playlists;
 5. ➕ Criar novas playlists;
-6. ✏️ Personalizar playlists;
-7. 🎵 Adicionar e organizar músicas;
-8. ▶️ Reproduzir faixas;
-9. 📜 Consultar o histórico de reprodução;
-10. ⚙️ Gerenciar sua conta.
+6. 🎵 Adicionar e organizar músicas;
+7. ▶️ Reproduzir faixas;
+8. ⚙️ Gerenciar sua conta.
 
 ---
 
@@ -109,23 +106,8 @@ A aplicação busca realizar tarefas como:
 </tr>
 
 <tr>
-<td>📜 <strong>Histórico</strong></td>
-<td>Registro das músicas e playlists reproduzidas.</td>
-</tr>
-
-<tr>
 <td>💾 <strong>Persistência</strong></td>
 <td>Armazenamento local das informações.</td>
-</tr>
-
-<tr>
-<td>🎚️ <strong>Equalizador</strong></td>
-<td>Possibilidade de personalização dos controles de áudio.</td>
-</tr>
-
-<tr>
-<td>🌙 <strong>Personalização</strong></td>
-<td>Possibilidade de personalização da interface e modo escuro.</td>
 </tr>
 
 </table>
