@@ -33,7 +33,7 @@ A aplicação permite que o usuário organize suas músicas favoritas, crie play
 <div align="center">
 
 | 🎓 Projeto | 💻 Tecnologia | 🏫 Instituição
-|:---:|:---:|:---:|:---:|
+|:---:|:---:|:---:
 | Echo Music | Java | IF Goiano
 
 </div>
