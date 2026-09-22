@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -16,10 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-/**
- * Tela de criação de conta. Ao cadastrar com sucesso, volta para a
- * TelaLogin para que o usuário já entre com a conta recém-criada.
- */
+
 public class TelaCadastro extends JFrame {
 
     private JTextField campoNome;
@@ -159,8 +156,6 @@ public class TelaCadastro extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        // TODO: persistir a nova conta assim que houver um serviço de cadastro
         JOptionPane.showMessageDialog(this,
                 "Conta criada com sucesso! Faça login para continuar.",
                 "Echo Music",

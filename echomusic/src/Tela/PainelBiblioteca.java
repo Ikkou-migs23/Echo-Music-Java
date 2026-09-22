@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,13 +13,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import negocio.Playlist;
+import Negocio.Playlist;
 
-/**
- * Conteúdo principal da "Sua Biblioteca" (barra de busca, cabeçalho + botão
- * criar, filtros e grade de cards). Recebe a lista de playlists e o que
- * fazer quando o usuário abre uma delas ou pede para criar uma nova.
- */
+
 public class PainelBiblioteca extends JPanel {
 
     private static final int COLUNAS_GRADE = 3;
@@ -86,9 +82,7 @@ public class PainelBiblioteca extends JPanel {
 
         return painel;
     }
-
-    // ---------- filtros (Categoria / Ordenar) ----------
-
+// --- filtros ---
     private JPanel criarFiltros() {
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         filtros.setBackground(Tema.FUNDO);
@@ -110,10 +104,7 @@ public class PainelBiblioteca extends JPanel {
         return rotulo;
     }
 
-    /**
-     * Combo box com visual discreto (borda fina arredondada, sem relevo),
-     * usado nos filtros da biblioteca.
-     */
+
     private JComboBox<String> criarComboBox(String[] itens) {
         JComboBox<String> combo = new JComboBox<>(itens);
         combo.setFont(Tema.FONTE_TEXTO_PEQUENA);
@@ -127,9 +118,7 @@ public class PainelBiblioteca extends JPanel {
         ));
         return combo;
     }
-
-    // ---------- grade de playlists ----------
-
+// --- grade ---
     private JPanel criarCards() {
         JPanel cards = new JPanel(new GridLayout(0, COLUNAS_GRADE, ESPACAMENTO_GRADE, ESPACAMENTO_GRADE));
         cards.setBackground(Tema.FUNDO);
@@ -144,10 +133,6 @@ public class PainelBiblioteca extends JPanel {
                     () -> aoAbrirPlaylist.accept(playlist)
             ));
         }
-
-        // Envolve a grade em um painel que a "encolhe" para o topo, para o
-        // GridLayout não esticar a altura das linhas preenchendo todo o
-        // espaço vertical disponível quando há poucas playlists.
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(Tema.FUNDO);
         wrapper.add(cards, BorderLayout.NORTH);

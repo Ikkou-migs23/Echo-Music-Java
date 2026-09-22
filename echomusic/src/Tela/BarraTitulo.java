@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -15,18 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-/**
- * Barra de título personalizada usada em todas as telas do sistema, já
- * que as janelas passaram a ser {@code undecorated} (sem a barra padrão
- * do Windows). Fornece:
- * <ul>
- *   <li>um botão de fechar vermelho com "X" branco no canto superior
- *   direito, que respeita o {@code defaultCloseOperation} da janela;</li>
- *   <li>a possibilidade de arrastar a janela clicando e arrastando a
- *   própria barra (necessário, já que sem decoração do SO a janela não
- *   pode mais ser movida pelo título nativo).</li>
- * </ul>
- */
+
 public class BarraTitulo extends JPanel {
 
     private static final int ALTURA = 42;
@@ -69,10 +58,6 @@ public class BarraTitulo extends JPanel {
             	fechar.setForeground(Tema.ROXO);
             }
         });
-
-        // Dispara o evento de fechamento padrão da janela, para que o
-        // defaultCloseOperation de cada tela continue sendo respeitado
-        // (dispose em telas internas, exit em telas raiz).
         fechar.addActionListener(e ->
                 janela.dispatchEvent(new WindowEvent(janela, WindowEvent.WINDOW_CLOSING)));
 

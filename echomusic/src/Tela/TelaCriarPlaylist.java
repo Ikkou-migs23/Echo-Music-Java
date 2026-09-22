@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,23 +27,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import negocio.LeitorMp3;
-import negocio.Musica;
-import negocio.Playlist;
-import negocio.RepositorioPlaylists;
+import Negocio.LeitorMp3;
+import Negocio.Musica;
+import Negocio.Playlist;
+import Negocio.RepositorioPlaylists;
 
-/**
- * Tela de criação de uma nova playlist (nome, descrição, categoria, capa e
- * músicas). Reaproveita BarraLateral, BarraSuperior e BarraReprodutor para
- * seguir o mesmo layout das demais telas internas.
- *
- * As músicas são adicionadas selecionando arquivos .mp3 reais do
- * computador: o nome vem do nome do arquivo e a duração é calculada de
- * verdade a partir do próprio arquivo (ver {@link LeitorMp3}), em vez de
- * ser digitada manualmente. A playlist só é enviada para o
- * {@link RepositorioPlaylists} (ainda em memória, sem banco de dados) no
- * momento de salvar.
- */
+
 public class TelaCriarPlaylist extends JFrame {
 
     private CampoTextoPlaceholder campoNome;
@@ -96,7 +85,7 @@ public class TelaCriarPlaylist extends JFrame {
                 new TelaPerfil().setVisible(true);
             }
             case "Sobre" -> {
-                dispose(); 
+                dispose();
                 new TelaSobre().setVisible(true);
             }
         }
@@ -124,9 +113,7 @@ public class TelaCriarPlaylist extends JFrame {
         area.add(scroll, BorderLayout.CENTER);
         return area;
     }
-
-    // ---------- Título ----------
-
+// --- título ---
     private JLabel criarTitulo() {
         JLabel titulo = new JLabel("Criar Nova Playlist");
         titulo.setFont(Tema.FONTE_TITULO_GRANDE);
@@ -135,9 +122,7 @@ public class TelaCriarPlaylist extends JFrame {
         titulo.setBorder(new EmptyBorder(0, 0, 18, 0));
         return titulo;
     }
-
-    // ---------- Linha principal: Capa | Nome/Descrição/Categoria ----------
-
+// --- principal ---
     private JPanel criarLinhaPrincipal() {
         JPanel linha = new JPanel(new GridBagLayout());
         linha.setBackground(Tema.FUNDO);
@@ -202,9 +187,7 @@ public class TelaCriarPlaylist extends JFrame {
 
         return coluna;
     }
-
-    // ---------- Seção "Adicionar Músicas" ----------
-
+// --- músicas ---
     private JPanel criarSecaoMusicas() {
         JPanel secao = new JPanel();
         secao.setLayout(new BoxLayout(secao, BoxLayout.Y_AXIS));
@@ -240,12 +223,7 @@ public class TelaCriarPlaylist extends JFrame {
         return secao;
     }
 
-    /**
-     * Abre o seletor de arquivos do sistema (permitindo escolher vários de
-     * uma vez) filtrado para .mp3. Para cada arquivo escolhido, o nome da
-     * música vem do nome do arquivo e a duração é lida de verdade do
-     * próprio arquivo — nada é digitado manualmente.
-     */
+
     private void adicionarMusica() {
         JFileChooser seletor = new JFileChooser();
         seletor.setDialogTitle("Selecionar Música (.mp3)");
@@ -310,9 +288,7 @@ public class TelaCriarPlaylist extends JFrame {
         painelListaMusicas.revalidate();
         painelListaMusicas.repaint();
     }
-
-    // ---------- Rodapé de botões (Cancelar / Salvar) ----------
-
+// --- rodapé ---
     private JPanel criarRodapeBotoes() {
         JPanel painel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         painel.setBackground(Tema.FUNDO);
@@ -373,9 +349,7 @@ public class TelaCriarPlaylist extends JFrame {
         dispose();
         new TelaPrincipal().setVisible(true);
     }
-
-    // ---------- Utilitários de campo ----------
-
+// --- campos ---
     private JLabel criarRotulo(String texto) {
         JLabel rotulo = new JLabel(texto);
         rotulo.setFont(Tema.FONTE_TEXTO);

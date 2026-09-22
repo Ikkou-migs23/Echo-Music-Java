@@ -17,8 +17,7 @@ public class UsuarioDAO {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
-	// CREATE
+// --- CREATE ---
 	public String cadastrar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "INSERT INTO usuarios (usuario, senha) "
@@ -29,8 +28,7 @@ public class UsuarioDAO {
 
 		return "Cadastrado com Sucesso";
 	}
-
-	// READ (login)
+// --- READ ---
 	public boolean logar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "SELECT * FROM usuarios WHERE usuario = '"+this.usuario+"' "
@@ -41,8 +39,7 @@ public class UsuarioDAO {
 
 		return rs.next();
 	}
-
-	// READ (buscar um usuario por id)
+// --- READ ---
 	public ResultSet consultar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "SELECT * FROM usuarios WHERE idUsuario = "+this.idUsuario+";";
@@ -51,8 +48,7 @@ public class UsuarioDAO {
 
 		return objeto.query();
 	}
-
-	// READ (listar todos)
+// --- READ ---
 	public ResultSet listar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "SELECT * FROM usuarios;";
@@ -61,8 +57,7 @@ public class UsuarioDAO {
 
 		return objeto.query();
 	}
-
-	// UPDATE
+// --- UPDATE ---
 	public String alterar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "UPDATE usuarios SET usuario = '"+this.usuario+"', "
@@ -74,8 +69,7 @@ public class UsuarioDAO {
 
 		return "Usuario Alterado com Sucesso";
 	}
-
-	// DELETE
+// --- DELETE ---
 	public String excluir() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "DELETE FROM usuarios WHERE idUsuario = "+this.idUsuario+";";

@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -19,10 +19,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-/**
- * Tela de login. Ao autenticar com sucesso, abre a TelaPrincipal.
- * O link "Cadastre-se" leva à TelaCadastro.
- */
+
 public class TelaLogin extends JFrame {
 
     public TelaLogin() {
@@ -66,8 +63,6 @@ public class TelaLogin extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        // TODO: validar credenciais reais assim que houver um serviço de autenticação
         dispose();
         new TelaPrincipal().setVisible(true);
     }

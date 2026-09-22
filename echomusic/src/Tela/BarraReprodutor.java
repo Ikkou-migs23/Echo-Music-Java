@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,19 +16,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 
-import negocio.Musica;
+import Negocio.Musica;
 
-/**
- * Barra inferior do player (música atual, controles e volume).
- * Reaproveitada em todas as telas internas para manter o mesmo player
- * fixo na parte de baixo da janela.
- *
- * Sem um serviço de áudio real por trás, o player mantém apenas o
- * *estado* de reprodução (fila atual, índice da música e se está tocando
- * ou não) e atualiza a própria interface de acordo — o suficiente para os
- * botões responderem de forma consistente enquanto não há um back-end de
- * música de verdade.
- */
+
 public class BarraReprodutor extends JPanel {
 
     private List<Musica> fila;
@@ -54,10 +44,7 @@ public class BarraReprodutor extends JPanel {
 
         atualizarExibicao();
     }
-
-    // ---------- API pública usada pelas telas que tocam música ----------
-
-    /** Começa a tocar a música de índice {@code indice} dentro de {@code musicas}. */
+// --- API ---
     public void tocar(List<Musica> musicas, int indice) {
         if (musicas == null || musicas.isEmpty()) return;
 
@@ -69,7 +56,7 @@ public class BarraReprodutor extends JPanel {
         notificarMudancaEstado();
     }
 
-    /** Alterna entre tocar e pausar a música atualmente carregada. */
+
     public void alternarPlayPause() {
         if (fila == null || indiceAtual < 0) {
             JOptionPane.showMessageDialog(this,
@@ -84,12 +71,12 @@ public class BarraReprodutor extends JPanel {
         notificarMudancaEstado();
     }
 
-    /** Indica se {@code musicas} é a fila atualmente carregada no player. */
+
     public boolean estaReproduzindo(List<Musica> musicas) {
         return fila == musicas;
     }
 
-    /** Permite que uma tela seja avisada sempre que o estado tocando/pausado mudar. */
+
     public void aoMudarEstado(Consumer<Boolean> ouvinte) {
         this.aoMudarEstado = ouvinte;
     }
@@ -97,9 +84,7 @@ public class BarraReprodutor extends JPanel {
     private void notificarMudancaEstado() {
         if (aoMudarEstado != null) aoMudarEstado.accept(tocando);
     }
-
-    // ---------- construção da UI ----------
-
+// --- UI ---
     private JPanel criarMusica() {
         JPanel musica = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8));
         musica.setBackground(Tema.BRANCO);
@@ -170,9 +155,7 @@ public class BarraReprodutor extends JPanel {
         volumePanel.add(slider);
         return volumePanel;
     }
-
-    // ---------- lógica interna ----------
-
+// --- lógica ---
     private void mudarMusica(int direcao) {
         if (fila == null || fila.isEmpty()) {
             JOptionPane.showMessageDialog(this,

@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -6,12 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import javax.swing.JTextField;
 
-/**
- * {@link JTextField} com suporte a placeholder de verdade: o texto de
- * apoio é apenas desenhado por cima do campo quando ele está vazio,
- * nunca faz parte do conteúdo digitável, e some automaticamente assim
- * que o usuário começa a digitar (comportamento padrão de placeholder).
- */
+
 public class CampoTextoPlaceholder extends JTextField {
 
     private final String placeholder;

@@ -1,4 +1,4 @@
-package negocio;
+package Negocio;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,8 +28,7 @@ public class Usuario {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
-	// CREATE
+// --- CREATE ---
 	public String cadastrar() throws SQLException, ClassNotFoundException {
 		UsuarioDAO objeto = new UsuarioDAO();
 		objeto.setUsuario(this.usuario);
@@ -37,8 +36,7 @@ public class Usuario {
 
 		return objeto.cadastrar();
 	}
-
-	// READ (login)
+// --- READ ---
 	public boolean logar() throws SQLException, ClassNotFoundException {
 		UsuarioDAO objeto = new UsuarioDAO();
 		objeto.setUsuario(this.usuario);
@@ -46,23 +44,20 @@ public class Usuario {
 
 		return objeto.logar();
 	}
-
-	// READ (buscar um usuário por id)
+// --- READ ---
 	public Usuario consultar(int id) throws SQLException, ClassNotFoundException {
 		UsuarioDAO objeto = new UsuarioDAO();
 		objeto.setId(id);
 
 		return objeto.consultar();
 	}
-
-	// READ (listar todos)
+// --- READ ---
 	public List<Usuario> listar() throws SQLException, ClassNotFoundException {
 		UsuarioDAO objeto = new UsuarioDAO();
 
 		return objeto.listar();
 	}
-
-	// UPDATE
+// --- UPDATE ---
 	public String alterar() throws SQLException, ClassNotFoundException {
 		UsuarioDAO objeto = new UsuarioDAO();
 		objeto.setId(this.id);
@@ -71,8 +66,7 @@ public class Usuario {
 
 		return objeto.alterar();
 	}
-
-	// DELETE
+// --- DELETE ---
 	public String excluir(int id) throws SQLException, ClassNotFoundException {
 		UsuarioDAO objeto = new UsuarioDAO();
 		objeto.setId(id);

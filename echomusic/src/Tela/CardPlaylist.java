@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,11 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-/**
- * Card individual de playlist (capa colorida + nome + quantidade + botão
- * "..."). Clicar em qualquer parte do card (menos no botão "...") abre a
- * TelaPlaylist daquela playlist, através do callback aoClicar.
- */
+
 public class CardPlaylist extends JPanel {
 
     public CardPlaylist(String nome, String quantidade, Color cor, String textoCapa, Runnable aoClicar) {

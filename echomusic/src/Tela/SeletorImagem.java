@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -10,13 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-/**
- * Área quadrada para seleção de imagem (foto de perfil, capa de playlist,
- * capa de música...), seguindo o mesmo padrão visual criado originalmente
- * na TelaPerfil: um quadrado com um texto centralizado indicando para que
- * serve a imagem. Ao clicar, abre o seletor de arquivos do sistema e, ao
- * escolher uma imagem, ela passa a ser exibida no próprio quadrado.
- */
+
 public class SeletorImagem extends JButton {
 
     private final int lado;

@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -14,11 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
-/**
- * Tela "Meu Perfil" — edição de nome, e-mail, senha e foto do usuário.
- * Segue o mesmo layout (BarraLateral + BarraSuperior + BarraReprodutor)
- * usado nas demais telas internas.
- */
+
 public class TelaPerfil extends JFrame {
 
     private static final int LADO_FOTO = 190;
@@ -58,7 +54,6 @@ public class TelaPerfil extends JFrame {
                 new TelaPrincipal().setVisible(true);
             }
             case "Perfil" -> {
-                // já estamos no Perfil, não faz nada
             }
             case "Sobre" -> {
                 dispose();
@@ -102,8 +97,7 @@ public class TelaPerfil extends JFrame {
         area.add(criarColunaInformacoes(), BorderLayout.CENTER);
         return area;
     }
-
-    // ---------- coluna esquerda: foto de perfil ----------
+// --- esquerda ---
     private JPanel criarColunaFoto() {
         JPanel painel = new JPanel();
         painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
@@ -130,8 +124,7 @@ public class TelaPerfil extends JFrame {
         painel.add(ajuda);
         return painel;
     }
-
-    // ---------- coluna direita: dados do perfil ----------
+// --- direita ---
     private JPanel criarColunaInformacoes() {
         JPanel painel = new JPanel();
         painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
@@ -180,15 +173,13 @@ public class TelaPerfil extends JFrame {
     }
 
     private void sairPerfil() {
-        // TODO: persistir as alterações assim que houver um serviço de perfil
         JOptionPane.showMessageDialog(this,
                 "Sessão encerrada.",
                 "Echo Music",
                 JOptionPane.INFORMATION_MESSAGE);
     }
-    
+
     private void salvarAlteracoes() {
-        // TODO: persistir as alterações assim que houver um serviço de perfil
         JOptionPane.showMessageDialog(this,
                 "Alterações salvas com sucesso!",
                 "Echo Music",

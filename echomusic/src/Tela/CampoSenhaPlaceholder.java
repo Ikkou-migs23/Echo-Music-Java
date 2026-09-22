@@ -1,22 +1,18 @@
-package telas;
+package Tela;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import javax.swing.JTextArea;
+import javax.swing.JPasswordField;
 
-/**
- * {@link JTextArea} com placeholder real (não editável), desenhado por
- * cima da área apenas quando ela está vazia. Usada em campos de
- * descrição de várias linhas.
- */
-public class AreaTextoPlaceholder extends JTextArea {
+
+public class CampoSenhaPlaceholder extends JPasswordField {
 
     private final String placeholder;
 
-    public AreaTextoPlaceholder(String placeholder, int linhas, int colunas) {
-        super(linhas, colunas);
+    public CampoSenhaPlaceholder(String placeholder) {
+        super();
         this.placeholder = placeholder;
     }
 
@@ -24,7 +20,7 @@ public class AreaTextoPlaceholder extends JTextArea {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (!getText().isEmpty() || placeholder == null) return;
+        if (getPassword().length != 0 || placeholder == null) return;
 
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -33,7 +29,7 @@ public class AreaTextoPlaceholder extends JTextArea {
 
         FontMetrics fm = g2.getFontMetrics();
         int x = getInsets().left;
-        int y = getInsets().top + fm.getAscent();
+        int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
         g2.drawString(placeholder, x, y);
         g2.dispose();
     }

@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -19,15 +19,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.CompoundBorder;
 
-import negocio.Musica;
-import negocio.Playlist;
-import negocio.RepositorioPlaylists;
+import Negocio.Musica;
+import Negocio.Playlist;
+import Negocio.RepositorioPlaylists;
 
-/**
- * Tela de uma playlist específica, aberta ao clicar em um CardPlaylist na
- * TelaPrincipal. Mostra: capa, nome, botão play/pause, botão editar, botão
- * voltar, e a lista de músicas (clicáveis para tocar).
- */
+
 public class TelaPlaylist extends JFrame {
 
     private final Playlist playlist;
@@ -86,8 +82,7 @@ public class TelaPlaylist extends JFrame {
 
         add(raiz);
     }
-
-    // ---------- navegação pelo menu lateral ----------
+// --- navegação ---
     private void navegar(String tela) {
         switch (tela) {
             case "Home", "Playlists" -> {
@@ -104,8 +99,7 @@ public class TelaPlaylist extends JFrame {
             }
         }
     }
-
-    // ---------- topo: voltar + cabeçalho da playlist ----------
+// --- topo ---
     private JPanel criarTopo() {
         JPanel topo = new JPanel(new BorderLayout());
         topo.setBackground(Tema.FUNDO);
@@ -175,11 +169,6 @@ public class TelaPlaylist extends JFrame {
         quantidadeLabel.setForeground(Tema.TEXTO_SECUNDARIO);
         quantidadeLabel.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
         quantidadeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        // Painel dedicado apenas aos textos, alinhado à esquerda e do
-        // tamanho da própria largura de conteúdo — o BoxLayout.Y_AXIS
-        // posiciona cada linha (nome, quantidade, botões) na mesma borda
-        // esquerda, mantendo tudo alinhado com o topo.
         JPanel textos = new JPanel();
         textos.setLayout(new BoxLayout(textos, BoxLayout.Y_AXIS));
         textos.setBackground(Tema.FUNDO);
@@ -248,8 +237,7 @@ public class TelaPlaylist extends JFrame {
             new TelaPrincipal().setVisible(true);
         }
     }
-
-    // ---------- lista de músicas ----------
+// --- músicas ---
     private JScrollPane criarListaMusicas() {
         JPanel lista = new JPanel();
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
@@ -275,9 +263,6 @@ public class TelaPlaylist extends JFrame {
         ));
         linha.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
         linha.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Clicar em qualquer parte da linha (fora dos botões) toca a
-        // música a partir dela, atualizando a barra do player.
         linha.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -315,9 +300,6 @@ public class TelaPlaylist extends JFrame {
         editar.setForeground(Tema.TEXTO_SECUNDARIO);
         editar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         editar.setToolTipText("Editar música");
-        // Ainda não há um serviço de músicas para carregar os dados desta
-        // música específica no formulário; por enquanto abre a tela de
-        // edição em branco.
         editar.addActionListener(e -> new TelaEditarMusica().setVisible(true));
 
         lado.add(duracao);

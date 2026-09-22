@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -10,11 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-/**
- * Tela "Sobre" — informações sobre o Echo Music. Segue o mesmo layout
- * (BarraLateral + BarraSuperior + BarraReprodutor) usado nas demais
- * telas internas.
- */
+
 public class TelaSobre extends JFrame {
 
     public TelaSobre() {
@@ -56,7 +52,6 @@ public class TelaSobre extends JFrame {
                 new TelaPerfil().setVisible(true);
             }
             case "Sobre" -> {
-                // já estamos em Sobre, não faz nada
             }
         }
     }

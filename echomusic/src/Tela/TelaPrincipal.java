@@ -1,23 +1,14 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import negocio.Playlist;
-import negocio.RepositorioPlaylists;
+import Negocio.Playlist;
+import Negocio.RepositorioPlaylists;
 
-/**
- * Tela "Sua Biblioteca" — tela inicial do sistema após o login.
- * Monta a janela a partir dos componentes reutilizáveis (BarraLateral,
- * PainelBiblioteca, BarraReprodutor), sem duplicar a construção da UI.
- *
- * As playlists exibidas vêm do {@link RepositorioPlaylists}, que mantém a
- * lista em memória durante a execução — assim, criar ou deletar uma
- * playlist em outra tela já aparece aqui na próxima vez que esta tela for
- * aberta.
- */
+
 public class TelaPrincipal extends JFrame {
 
     public TelaPrincipal() {
@@ -57,14 +48,13 @@ public class TelaPrincipal extends JFrame {
     private void navegar(String tela) {
         switch (tela) {
             case "Home", "Playlists" -> {
-                // já estamos na Sua Biblioteca, não faz nada
             }
             case "Perfil" -> {
                 dispose();
                 new TelaPerfil().setVisible(true);
             }
             case "Sobre" -> {
-                dispose(); 
+                dispose();
                 new TelaSobre().setVisible(true);
             }
         }

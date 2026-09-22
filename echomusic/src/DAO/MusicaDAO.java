@@ -21,8 +21,7 @@ public class MusicaDAO {
 	public void setIdPlaylist(int idPlaylist) {
 		this.idPlaylist = idPlaylist;
 	}
-
-	// CREATE
+// --- CREATE ---
 	public String cadastrar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "INSERT INTO musicas (nome, duracao, idPlaylist) "
@@ -33,8 +32,7 @@ public class MusicaDAO {
 
 		return "Musica Cadastrada com Sucesso";
 	}
-
-	// READ (buscar uma musica por id)
+// --- READ ---
 	public ResultSet consultar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "SELECT * FROM musicas WHERE idMusica = "+this.idMusica+";";
@@ -43,8 +41,7 @@ public class MusicaDAO {
 
 		return objeto.query();
 	}
-
-	// READ (listar todas)
+// --- READ ---
 	public ResultSet listar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "SELECT * FROM musicas;";
@@ -53,8 +50,7 @@ public class MusicaDAO {
 
 		return objeto.query();
 	}
-
-	// READ (listar por playlist)
+// --- READ ---
 	public ResultSet listarPorPlaylist() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "SELECT * FROM musicas WHERE idPlaylist = "+this.idPlaylist+";";
@@ -63,8 +59,7 @@ public class MusicaDAO {
 
 		return objeto.query();
 	}
-
-	// UPDATE
+// --- UPDATE ---
 	public String alterar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "UPDATE musicas SET nome = '"+this.nome+"', "
@@ -77,8 +72,7 @@ public class MusicaDAO {
 
 		return "Musica Alterada com Sucesso";
 	}
-
-	// DELETE
+// --- DELETE ---
 	public String deletar() throws SQLException, ClassNotFoundException {
 		Conexao objeto = new Conexao();
 		String sql = "DELETE FROM musicas WHERE idMusica = "+this.idMusica+";";

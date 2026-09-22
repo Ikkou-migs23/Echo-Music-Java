@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -15,11 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
-/**
- * Tela de edição de uma música (nome, artista, álbum, categoria e capa).
- * Reaproveita BarraLateral, BarraSuperior e BarraReprodutor para seguir o
- * mesmo layout das demais telas internas.
- */
+
 public class TelaEditarMusica extends JFrame {
 
     private CampoTextoPlaceholder txtNome;
@@ -64,7 +60,7 @@ public class TelaEditarMusica extends JFrame {
                 new TelaPerfil().setVisible(true);
             }
             case "Sobre" -> {
-                dispose(); 
+                dispose();
                 new TelaSobre().setVisible(true);
             }
         }
@@ -78,9 +74,7 @@ public class TelaEditarMusica extends JFrame {
         painel.add(new BarraReprodutor(), BorderLayout.SOUTH);
         return painel;
     }
-
-    // ---------- formulário ----------
-
+// --- formulário ---
     private JPanel criarFormulario() {
         JPanel area = new JPanel(new BorderLayout());
         area.setBackground(Tema.FUNDO);
@@ -136,9 +130,7 @@ public class TelaEditarMusica extends JFrame {
         botoes.add(salvar);
         return botoes;
     }
-
-    // ---------- capa ----------
-
+// --- capa ---
     private JPanel criarCapa() {
         JPanel painel = new JPanel();
         painel.setBackground(Tema.FUNDO);
@@ -158,9 +150,7 @@ public class TelaEditarMusica extends JFrame {
         painel.add(seletorCapa);
         return painel;
     }
-
-    // ---------- campos ----------
-
+// --- campos ---
     private JPanel criarCampos() {
         JPanel painel = new JPanel();
         painel.setBackground(Tema.FUNDO);
@@ -222,9 +212,7 @@ public class TelaEditarMusica extends JFrame {
         painel.add(Box.createVerticalStrut(10));
         return texto;
     }
-
-    // ---------- ações ----------
-
+// --- ações ---
     private void salvar() {
         if (txtNome.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this,
@@ -233,8 +221,6 @@ public class TelaEditarMusica extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        // TODO: persistir as alterações assim que houver um serviço de músicas
         JOptionPane.showMessageDialog(this,
                 "Música atualizada com sucesso!",
                 "Echo Music",

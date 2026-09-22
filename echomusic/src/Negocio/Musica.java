@@ -1,4 +1,4 @@
-package negocio;
+package Negocio;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,8 +37,7 @@ public class Musica {
 	public void setIdPlaylist(int idPlaylist) {
 		this.idPlaylist = idPlaylist;
 	}
-
-	// CREATE
+// --- CREATE ---
 	public String cadastrar() throws SQLException, ClassNotFoundException {
 		MusicaDAO objeto = new MusicaDAO();
 		objeto.setNome(this.nome);
@@ -47,8 +46,7 @@ public class Musica {
 
 		return objeto.cadastrar();
 	}
-
-	// READ (buscar uma musica por id)
+// --- READ ---
 	public static Musica consultar(int idMusica) throws SQLException, ClassNotFoundException {
 		MusicaDAO objeto = new MusicaDAO();
 		objeto.setIdMusica(idMusica);
@@ -65,8 +63,7 @@ public class Musica {
 
 		return musica;
 	}
-
-	// READ (listar todas)
+// --- READ ---
 	public static List<Musica> listar() throws SQLException, ClassNotFoundException {
 		MusicaDAO objeto = new MusicaDAO();
 		ResultSet rs = objeto.listar();
@@ -83,8 +80,7 @@ public class Musica {
 
 		return lista;
 	}
-
-	// READ (listar por playlist)
+// --- READ ---
 	public static List<Musica> listarPorPlaylist(int idPlaylist) throws SQLException, ClassNotFoundException {
 		MusicaDAO objeto = new MusicaDAO();
 		objeto.setIdPlaylist(idPlaylist);
@@ -102,8 +98,7 @@ public class Musica {
 
 		return lista;
 	}
-
-	// UPDATE
+// --- UPDATE ---
 	public String alterar() throws SQLException, ClassNotFoundException {
 		MusicaDAO objeto = new MusicaDAO();
 		objeto.setIdMusica(this.idMusica);
@@ -113,8 +108,7 @@ public class Musica {
 
 		return objeto.alterar();
 	}
-
-	// DELETE
+// --- DELETE ---
 	public String deletar() throws SQLException, ClassNotFoundException {
 		MusicaDAO objeto = new MusicaDAO();
 		objeto.setIdMusica(this.idMusica);

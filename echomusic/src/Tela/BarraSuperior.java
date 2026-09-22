@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -7,15 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-/**
- * Barra superior padrão (campo de busca à esquerda), no mesmo estilo usado
- * na TelaPrincipal. Antes cada tela (TelaCriarPlaylist, TelaEditarMusica,
- * TelaPerfil, PainelBiblioteca...) reimplementava essa barra do zero; agora
- * todas reaproveitam este componente.
- *
- * Aceita um componente opcional para o lado direito (ex.: botão "Sair" em
- * telas de formulário).
- */
+
 public class BarraSuperior extends JPanel {
 
     public BarraSuperior() {

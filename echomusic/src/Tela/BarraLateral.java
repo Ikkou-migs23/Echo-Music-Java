@@ -1,4 +1,4 @@
-package telas;
+package Tela;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -15,15 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-/**
- * Menu lateral (Home, Playlists, Perfil, Sobre), presente em todas as telas
- * internas do sistema. Cada tela define, via {@link #aoClicar}, para onde
- * navegar quando um item é selecionado.
- *
- * O item da tela atual é destacado em roxo claro; os demais reagem com um
- * hover roxo bem suave, para reforçar a identidade visual sem perder
- * contraste com o texto.
- */
+
 public class BarraLateral extends JPanel {
 
     private static final String[] ITENS_MENU = {"Playlists", "Perfil", "Sobre"};
@@ -46,10 +38,7 @@ public class BarraLateral extends JPanel {
         add(painelMenu, BorderLayout.CENTER);
     }
 
-    /**
-     * Define o que acontece quando o usuário clica em um item do menu.
-     * Ex.: barraLateral.aoClicar(tela -> { dispose(); ... });
-     */
+
     public void aoClicar(Consumer<String> ouvinte) {
         this.aoClicarBotao = ouvinte;
     }

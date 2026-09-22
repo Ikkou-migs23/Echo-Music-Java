@@ -1,4 +1,4 @@
-package negocio;
+package Negocio;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,16 +23,14 @@ public class Playlist {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	// CREATE
+// --- CREATE ---
 	public String cadastrar() throws SQLException, ClassNotFoundException {
 		PlaylistDAO objeto = new PlaylistDAO();
 		objeto.setNome(this.nome);
 
 		return objeto.cadastrar();
 	}
-
-	// READ (buscar uma playlist por id)
+// --- READ ---
 	public static Playlist consultar(int idPlaylist) throws SQLException, ClassNotFoundException {
 		PlaylistDAO objeto = new PlaylistDAO();
 		objeto.setIdPlaylist(idPlaylist);
@@ -47,8 +45,7 @@ public class Playlist {
 
 		return playlist;
 	}
-
-	// READ (listar todas)
+// --- READ ---
 	public static List<Playlist> listar() throws SQLException, ClassNotFoundException {
 		PlaylistDAO objeto = new PlaylistDAO();
 		ResultSet rs = objeto.listar();
@@ -63,8 +60,7 @@ public class Playlist {
 
 		return lista;
 	}
-
-	// UPDATE
+// --- UPDATE ---
 	public String alterar() throws SQLException, ClassNotFoundException {
 		PlaylistDAO objeto = new PlaylistDAO();
 		objeto.setIdPlaylist(this.idPlaylist);
@@ -72,8 +68,7 @@ public class Playlist {
 
 		return objeto.alterar();
 	}
-
-	// DELETE
+// --- DELETE ---
 	public String deletar() throws SQLException, ClassNotFoundException {
 		PlaylistDAO objeto = new PlaylistDAO();
 		objeto.setIdPlaylist(this.idPlaylist);
