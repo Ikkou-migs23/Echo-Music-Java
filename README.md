@@ -123,31 +123,11 @@ Entre elas estão:
 - 📝 Cadastro;
 - 🔐 Login;
 - ✅ Validação das credenciais;
-- 🔑 Recuperação de senha;
 - ❓ Pergunta de segurança;
 - 🚪 Encerramento de sessão;
 - 👤 Gerenciamento das informações da conta.
 
 O sistema deve impedir o acesso às funcionalidades internas enquanto o login não for validado corretamente.
-
----
-
-# 🎧 Player de Música
-
-O player é responsável pelo controle da reprodução das músicas.
-
-### Controles previstos:
-
-| Controle | Função |
-|:---:|---|
-| ▶️ | Reproduzir |
-| ⏸️ | Pausar |
-| ⏭️ | Próxima música |
-| ⏮️ | Música anterior |
-| 🎚️ | Controle de áudio |
-| ⌨️ | Atalhos do teclado |
-
-O sistema também prevê suporte às teclas de mídia do teclado e integração com o painel de controle de mídia do Windows.
 
 ---
 
@@ -161,7 +141,7 @@ Cada playlist pode possuir:
 - 📄 Descrição;
 - 🏷️ Categoria;
 - 🖼️ Imagem de capa;
-- 🎵 Músicas associadas.
+- 🎵 Músicas.
 
 ### Exemplo de organização:
 
