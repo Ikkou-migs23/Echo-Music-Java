@@ -1,0 +1,78 @@
+package DAO;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class PlaylistDAO {
+	private int idPlaylist;
+	private int idUsuario;
+	private String nome;
+
+	public void setIdPlaylist(int idPlaylist) {
+		this.idPlaylist = idPlaylist;
+	}
+	public void setIdUsuario(int idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+// --- CREATE ---
+	public String cadastrar() throws SQLException, ClassNotFoundException {
+		Conexao objeto = new Conexao();
+		String sql = "INSERT INTO playlists (idUsuario, nome) VALUES ("+this.idUsuario+",'"+this.nome+"');";
+
+		objeto.setSQL(sql);
+		objeto.update();
+
+		return "Playlist Cadastrada com Sucesso";
+	}
+// --- READ ---
+	public ResultSet consultar() throws SQLException, ClassNotFoundException {
+		Conexao objeto = new Conexao();
+		String sql = "SELECT * FROM playlists WHERE idPlaylist = "+this.idPlaylist+";";
+
+		objeto.setSQL(sql);
+
+		return objeto.query();
+	}
+// --- READ ---
+	public ResultSet listar() throws SQLException, ClassNotFoundException {
+		Conexao objeto = new Conexao();
+		String sql = "SELECT * FROM playlists;";
+
+		objeto.setSQL(sql);
+
+		return objeto.query();
+	}
+// --- READ ---
+	public ResultSet listarPorUsuario() throws SQLException, ClassNotFoundException {
+		Conexao objeto = new Conexao();
+		String sql = "SELECT * FROM playlists WHERE idUsuario = "+this.idUsuario+";";
+
+		objeto.setSQL(sql);
+
+		return objeto.query();
+	}
+// --- UPDATE ---
+	public String alterar() throws SQLException, ClassNotFoundException {
+		Conexao objeto = new Conexao();
+		String sql = "UPDATE playlists SET idUsuario = "+this.idUsuario+", nome = '"+this.nome+"' "
+					+"WHERE idPlaylist = "+this.idPlaylist+";";
+
+		objeto.setSQL(sql);
+		objeto.update();
+
+		return "Playlist Alterada com Sucesso";
+	}
+// --- DELETE ---
+	public String deletar() throws SQLException, ClassNotFoundException {
+		Conexao objeto = new Conexao();
+		String sql = "DELETE FROM playlists WHERE idPlaylist = "+this.idPlaylist+";";
+
+		objeto.setSQL(sql);
+		objeto.update();
+
+		return "Playlist Removida com Sucesso";
+	}
+}
