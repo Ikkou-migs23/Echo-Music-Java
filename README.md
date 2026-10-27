@@ -127,7 +127,7 @@ Entre elas estão:
 - 🚪 Encerramento de sessão;
 - 👤 Gerenciamento das informações da conta.
 
-O sistema deve impedir o acesso às funcionalidades internas enquanto o login não for validado corretamente.
+O sistema impede o acesso às funcionalidades internas enquanto o login não for validado corretamente.
 
 ---
 
