@@ -9,8 +9,6 @@ import java.util.List;
 import DAO.PlaylistDAO;
 
 public class Playlist {
-	private static int proximoId = 1;
-
 	private int idPlaylist;
 	private int idUsuario;
 	private String nome;
@@ -19,16 +17,6 @@ public class Playlist {
 	private List<Musica> musicas;
 
 	public Playlist() {
-	}
-
-	/** Cria uma playlist em memória (usada pela tela de criar playlist), com id gerado automaticamente. */
-	public Playlist(int idUsuario, String nome, Color cor, String textoCapa, List<Musica> musicas) {
-		this.idPlaylist = proximoId++;
-		this.idUsuario = idUsuario;
-		this.nome = nome;
-		this.cor = cor;
-		this.textoCapa = textoCapa;
-		this.musicas = musicas;
 	}
 
 	public int getIdPlaylist() {

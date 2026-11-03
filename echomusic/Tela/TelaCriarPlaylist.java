@@ -1,7 +1,6 @@
 package Tela;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -9,6 +8,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -28,9 +31,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Negocio.Musica;
-import Negocio.Playlist;
-import Negocio.RepositorioPlaylists;
-import Negocio.Sessao;
 
 
 public class TelaCriarPlaylist extends JFrame {
@@ -235,12 +235,46 @@ public class TelaCriarPlaylist extends JFrame {
         File[] arquivosEscolhidos = seletor.getSelectedFiles();
         if (arquivosEscolhidos.length == 0) return;
 
+        Path pastaMusicas = Paths.get(System.getProperty("user.dir"), "musicas");
+        try {
+            Files.createDirectories(pastaMusicas);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Não foi possível criar a pasta de músicas:\n" + e.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         for (File arquivo : arquivosEscolhidos) {
-            String nomeMusica = removerExtensao(arquivo.getName());
-            musicasAdicionadas.add(new Musica(nomeMusica));
+            try {
+                Path destino = copiarParaPastaMusicas(arquivo.toPath(), pastaMusicas);
+                String nomeMusica = removerExtensao(arquivo.getName());
+                musicasAdicionadas.add(new Musica(nomeMusica, destino.toString()));
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Erro ao copiar \"" + arquivo.getName() + "\":\n" + e.getMessage(),
+                        "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
 
         atualizarListaMusicas();
+    }
+
+    /** Copia o arquivo para a pasta de músicas; se o nome já existir, acrescenta " (n)" antes da extensão. */
+    private Path copiarParaPastaMusicas(Path origem, Path pasta) throws IOException {
+        String nomeArquivo = origem.getFileName().toString();
+        String base = removerExtensao(nomeArquivo);
+        String extensao = nomeArquivo.substring(base.length());
+
+        Path destino = pasta.resolve(nomeArquivo);
+        int contador = 1;
+        while (Files.exists(destino)) {
+            destino = pasta.resolve(base + " (" + contador++ + ")" + extensao);
+        }
+
+        return Files.copy(origem, destino);
     }
 
     private String removerExtensao(String nomeArquivo) {
@@ -332,21 +366,10 @@ public class TelaCriarPlaylist extends JFrame {
             return;
         }
 
-        String nome = campoNome.getText().trim();
-        String textoCapa = nome.length() <= 4 ? nome.toUpperCase() : nome.substring(0, 4).toUpperCase();
-
-        int hash = Math.abs(nome.hashCode());
-        Color corCapa = new Color(70 + hash % 120, 40 + (hash / 7) % 90, 110 + (hash / 13) % 110);
-
-        RepositorioPlaylists.adicionar(
-                new Playlist(Sessao.idUsuarioLogado, nome, corCapa, textoCapa, new ArrayList<>(musicasAdicionadas)));
-
         JOptionPane.showMessageDialog(this,
-                "Playlist \"" + nome + "\" salva com sucesso!",
-                "Sucesso",
-                JOptionPane.INFORMATION_MESSAGE);
-        dispose();
-        new TelaPrincipal().setVisible(true);
+                "Salvar playlists ainda não está disponível nesta versão.\nA playlist não foi salva.",
+                "Não disponível",
+                JOptionPane.WARNING_MESSAGE);
     }
 // --- campos ---
     private JLabel criarRotulo(String texto) {

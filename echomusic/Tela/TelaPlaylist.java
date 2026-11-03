@@ -21,7 +21,6 @@ import javax.swing.border.CompoundBorder;
 
 import Negocio.Musica;
 import Negocio.Playlist;
-import Negocio.RepositorioPlaylists;
 
 
 public class TelaPlaylist extends JFrame {
@@ -228,17 +227,10 @@ public class TelaPlaylist extends JFrame {
     }
 
     private void deletarPlaylist() {
-        int confirmar = javax.swing.JOptionPane.showConfirmDialog(this,
-                "Tem certeza que deseja deletar a playlist \"" + nome + "\"?",
-                "Deletar Playlist",
-                javax.swing.JOptionPane.YES_NO_OPTION,
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Remover playlists ainda não está disponível nesta versão.\nA playlist \"" + nome + "\" não foi removida.",
+                "Não disponível",
                 javax.swing.JOptionPane.WARNING_MESSAGE);
-
-        if (confirmar == javax.swing.JOptionPane.YES_OPTION) {
-            RepositorioPlaylists.remover(playlist);
-            dispose();
-            new TelaPrincipal().setVisible(true);
-        }
     }
 // --- músicas ---
     private JScrollPane criarListaMusicas() {

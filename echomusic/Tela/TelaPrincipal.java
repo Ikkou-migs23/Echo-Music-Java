@@ -1,12 +1,12 @@
 package Tela;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import Negocio.Playlist;
-import Negocio.RepositorioPlaylists;
 
 
 public class TelaPrincipal extends JFrame {
@@ -30,7 +30,7 @@ public class TelaPrincipal extends JFrame {
         barraLateral.aoClicar(this::navegar);
 
         PainelBiblioteca biblioteca = new PainelBiblioteca(
-                RepositorioPlaylists.listar(),
+                new ArrayList<>(),
                 this::abrirPlaylist,
                 this::abrirCriarPlaylist
         );

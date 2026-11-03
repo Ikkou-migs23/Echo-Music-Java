@@ -14,6 +14,7 @@ public class Musica {
 	private String nome;
 	private String duracao;
 	private int idPlaylist;
+	private String caminho;
 
 	public Musica() {
 	}
@@ -23,6 +24,12 @@ public class Musica {
 		this.idMusica = proximoId++;
 		this.nome = nome;
 		this.duracao = "--:--";
+	}
+
+	/** Cria uma música em memória com o caminho do arquivo copiado. */
+	public Musica(String nome, String caminho) {
+		this(nome);
+		this.caminho = caminho;
 	}
 
 	public int getIdMusica() {
@@ -48,6 +55,12 @@ public class Musica {
 	}
 	public void setIdPlaylist(int idPlaylist) {
 		this.idPlaylist = idPlaylist;
+	}
+	public String getCaminho() {
+		return caminho;
+	}
+	public void setCaminho(String caminho) {
+		this.caminho = caminho;
 	}
 // --- CREATE ---
 	public String cadastrar() throws SQLException, ClassNotFoundException {
