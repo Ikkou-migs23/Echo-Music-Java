@@ -1,6 +1,5 @@
 package Negocio;
 
-/** Guarda o usuário logado enquanto o programa está aberto. */
 public final class Sessao {
 
 	private static Usuario usuarioLogado;
