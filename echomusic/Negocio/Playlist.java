@@ -1,12 +1,18 @@
 package Negocio;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import DAO.PlaylistDAO;
+import DAO.SupabaseStorage;
 
 public class Playlist {
 	private static final Color[] CORES_CAPA = {
@@ -20,6 +26,8 @@ public class Playlist {
 	private String nome;
 	private Color cor;
 	private String textoCapa;
+	private String capaNuvem;
+	private File capaEscolhida;
 	private List<Musica> musicas = new ArrayList<Musica>();
 
 	public Playlist() {
@@ -55,6 +63,15 @@ public class Playlist {
 	public void setTextoCapa(String textoCapa) {
 		this.textoCapa = textoCapa;
 	}
+	public String getCapaNuvem() {
+		return capaNuvem;
+	}
+	public void setCapaNuvem(String capaNuvem) {
+		this.capaNuvem = capaNuvem;
+	}
+	public void setCapaEscolhida(File capaEscolhida) {
+		this.capaEscolhida = capaEscolhida;
+	}
 	public List<Musica> getMusicas() {
 		return musicas;
 	}
@@ -62,7 +79,6 @@ public class Playlist {
 		this.musicas = (musicas == null) ? new ArrayList<Musica>() : musicas;
 	}
 
-	/** Monta uma Playlist a partir da linha atual do ResultSet (sem carregar as músicas). */
 	private static Playlist deLinha(ResultSet rs) throws SQLException {
 		Playlist playlist = new Playlist();
 		playlist.setIdPlaylist(rs.getInt("idPlaylist"));
@@ -70,13 +86,13 @@ public class Playlist {
 		playlist.setNome(rs.getString("nome"));
 		playlist.setCor(new Color(rs.getInt("cor")));
 		playlist.setTextoCapa(rs.getString("textoCapa"));
+		playlist.setCapaNuvem(rs.getString("capaNuvem"));
 		if (playlist.getTextoCapa() == null) {
 			playlist.setTextoCapa(gerarTextoCapa(playlist.getNome()));
 		}
 		return playlist;
 	}
 
-	/** Iniciais do nome da playlist (até 3 letras), cabendo em VARCHAR(10). */
 	private static String gerarTextoCapa(String nome) {
 		StringBuilder sb = new StringBuilder();
 		for (String palavra : nome.trim().split("\\s+")) {
@@ -84,11 +100,9 @@ public class Playlist {
 				sb.append(Character.toUpperCase(palavra.charAt(0)));
 			}
 		}
-		return sb.length() == 0 ? "♫" : sb.toString();
+		return sb.toString();
 	}
-// --- CREATE ---
-	/** Salva a playlist e todas as músicas dela no banco. */
-	public String cadastrar() throws SQLException, ClassNotFoundException {
+	public String cadastrar() throws SQLException, ClassNotFoundException, IOException {
 		if (cor == null) {
 			cor = CORES_CAPA[(int) (Math.random() * CORES_CAPA.length)];
 		}
@@ -96,21 +110,100 @@ public class Playlist {
 			textoCapa = gerarTextoCapa(nome);
 		}
 
-		PlaylistDAO objeto = new PlaylistDAO();
-		objeto.setIdUsuario(this.idUsuario);
-		objeto.setNome(this.nome);
-		objeto.setCor(this.cor.getRGB() & 0xFFFFFF);
-		objeto.setTextoCapa(this.textoCapa);
-		this.idPlaylist = objeto.cadastrar();
+		String chaveCapa = enviarCapa();
 
-		for (Musica musica : musicas) {
-			musica.setIdPlaylist(this.idPlaylist);
-			musica.cadastrar();
+		try {
+			PlaylistDAO objeto = new PlaylistDAO();
+			objeto.setIdUsuario(this.idUsuario);
+			objeto.setNome(this.nome);
+			objeto.setCor(this.cor.getRGB() & 0xFFFFFF);
+			objeto.setTextoCapa(this.textoCapa);
+			objeto.setCapaNuvem(chaveCapa);
+			this.idPlaylist = objeto.cadastrar();
+		} catch (SQLException | ClassNotFoundException | RuntimeException e) {
+			apagarCapa(chaveCapa);
+			throw e;
+		}
+		this.capaNuvem = chaveCapa;
+		this.capaEscolhida = null;
+
+		List<Musica> salvas = new ArrayList<Musica>();
+		try {
+			for (Musica musica : musicas) {
+				musica.setIdPlaylist(this.idPlaylist);
+				musica.cadastrar();
+				salvas.add(musica);
+			}
+		} catch (SQLException | ClassNotFoundException | IOException | RuntimeException e) {
+			for (Musica musica : salvas) {
+				musica.desfazerCadastro();
+			}
+			try {
+				PlaylistDAO desfazer = new PlaylistDAO();
+				desfazer.setIdPlaylist(this.idPlaylist);
+				desfazer.deletar();
+			} catch (Exception ignorar) {
+			}
+			apagarCapa(chaveCapa);
+			this.capaNuvem = null;
+			throw e;
 		}
 
 		return "Playlist Cadastrada com Sucesso";
 	}
-// --- READ ---
+
+	private String enviarCapa() throws IOException {
+		if (capaEscolhida == null) return null;
+		if (!SupabaseStorage.configurado()) {
+			System.err.println("supabase.properties não encontrado: a capa da playlist não foi salva.");
+			return null;
+		}
+
+		Path preparada = FotoPerfil.prepararImagem(capaEscolhida);
+		try {
+			String chave = "capas/" + (idUsuario > 0 ? idUsuario : 0) + "-" + System.currentTimeMillis() + ".jpg";
+			SupabaseStorage.enviar(preparada, chave, "image/jpeg");
+
+			try {
+				Path copia = CapaPlaylist.arquivoLocal(chave);
+				Files.createDirectories(copia.getParent());
+				Files.copy(preparada, copia, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException | RuntimeException e) {
+				System.err.println("Não foi possível guardar a cópia local da capa: " + e.getMessage());
+			}
+			return chave;
+		} finally {
+			Files.deleteIfExists(preparada);
+		}
+	}
+
+	private static void apagarCapa(String chave) {
+		if (chave == null || chave.isBlank()) return;
+		try {
+			Path local = CapaPlaylist.arquivoLocal(chave);
+			if (local != null) Files.deleteIfExists(local);
+		} catch (IOException e) {
+			System.err.println("Não foi possível apagar a capa local: " + e.getMessage());
+		}
+		if (!SupabaseStorage.configurado()) return;
+		try {
+			SupabaseStorage.apagar(chave);
+		} catch (IOException e) {
+			System.err.println("A capa continua na nuvem: " + e.getMessage());
+		}
+	}
+
+	public Path arquivoCapa() throws IOException {
+		Path arquivo = CapaPlaylist.arquivoLocal(this.capaNuvem);
+		if (arquivo == null) return null;
+
+		synchronized (CapaPlaylist.class) {
+			if (!Files.isRegularFile(arquivo)) {
+				SupabaseStorage.baixar(this.capaNuvem, arquivo);
+			}
+		}
+		return arquivo;
+	}
 	public static Playlist consultar(int idPlaylist) throws SQLException, ClassNotFoundException {
 		PlaylistDAO objeto = new PlaylistDAO();
 		objeto.setIdPlaylist(idPlaylist);
@@ -124,7 +217,6 @@ public class Playlist {
 
 		return playlist;
 	}
-// --- READ ---
 	public static List<Playlist> listar() throws SQLException, ClassNotFoundException {
 		PlaylistDAO objeto = new PlaylistDAO();
 		ResultSet rs = objeto.listar();
@@ -138,8 +230,7 @@ public class Playlist {
 
 		return lista;
 	}
-// --- READ ---
-	/** Playlists do usuário, já com as músicas carregadas. */
+
 	public static List<Playlist> listarPorUsuario(int idUsuario) throws SQLException, ClassNotFoundException {
 		PlaylistDAO objeto = new PlaylistDAO();
 		objeto.setIdUsuario(idUsuario);
@@ -154,7 +245,6 @@ public class Playlist {
 
 		return lista;
 	}
-// --- UPDATE ---
 	public String alterar() throws SQLException, ClassNotFoundException {
 		PlaylistDAO objeto = new PlaylistDAO();
 		objeto.setIdPlaylist(this.idPlaylist);
@@ -162,14 +252,23 @@ public class Playlist {
 		objeto.setNome(this.nome);
 		objeto.setCor(this.cor == null ? 0 : (this.cor.getRGB() & 0xFFFFFF));
 		objeto.setTextoCapa(this.textoCapa);
+		objeto.setCapaNuvem(this.capaNuvem);
 
 		return objeto.alterar();
 	}
-// --- DELETE ---
 	public String deletar() throws SQLException, ClassNotFoundException {
+		List<Musica> arquivos = new ArrayList<Musica>(this.musicas);
+		if (arquivos.isEmpty()) {
+			arquivos = Musica.listarPorPlaylist(this.idPlaylist);
+		}
+
 		PlaylistDAO objeto = new PlaylistDAO();
 		objeto.setIdPlaylist(this.idPlaylist);
+		String resposta = objeto.deletar();
 
-		return objeto.deletar();
+		Musica.apagarArquivos(arquivos);
+		apagarCapa(this.capaNuvem);
+
+		return resposta;
 	}
 }
