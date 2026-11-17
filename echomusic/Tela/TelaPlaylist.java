@@ -44,6 +44,7 @@ public class TelaPlaylist extends JFrame {
         this.corCapa = playlist.getCor();
         this.textoCapa = playlist.getTextoCapa();
         this.musicas = playlist.getMusicas();
+        Musica.baixarEmSegundoPlano(this.musicas);
 
         setTitle("Echo Music - " + nome);
         setSize(1140, 720);
@@ -85,7 +86,6 @@ public class TelaPlaylist extends JFrame {
 
         add(raiz);
     }
-// --- navegação ---
     private void navegar(String tela) {
         switch (tela) {
             case "Home", "Playlists" -> {
@@ -102,7 +102,6 @@ public class TelaPlaylist extends JFrame {
             }
         }
     }
-// --- topo ---
     private JPanel criarTopo() {
         JPanel topo = new JPanel(new BorderLayout());
         topo.setBackground(Tema.FUNDO);
@@ -146,16 +145,49 @@ public class TelaPlaylist extends JFrame {
 
     private JPanel criarCapaGrande() {
         JPanel capa = new JPanel(new java.awt.GridBagLayout());
+        carregarImagemCapa(capa);
         capa.setPreferredSize(new Dimension(120, 120));
         capa.setBackground(corCapa);
 
-        JLabel texto = new JLabel(
-                "<html><center>" + textoCapa.replace("\n", "<br>") + "</center></html>"
-        );
-        texto.setForeground(Tema.BRANCO);
-        texto.setFont(Tema.FONTE_SUBTITULO.deriveFont(16f));
-        capa.add(texto);
+        if (Logo.temTexto(textoCapa)) {
+            JLabel texto = new JLabel(
+                    "<html><center>" + textoCapa.replace("\n", "<br>") + "</center></html>"
+            );
+            texto.setForeground(Tema.BRANCO);
+            texto.setFont(Tema.FONTE_SUBTITULO.deriveFont(16f));
+            capa.add(texto);
+        } else {
+            capa.add(new JLabel(Logo.criarIcone(90, 90)));
+        }
         return capa;
+    }
+
+    private void carregarImagemCapa(JPanel capa) {
+        if (playlist.getCapaNuvem() == null || playlist.getCapaNuvem().isBlank()) return;
+
+        new javax.swing.SwingWorker<java.nio.file.Path, Void>() {
+            @Override
+            protected java.nio.file.Path doInBackground() throws Exception {
+                return playlist.arquivoCapa();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    java.nio.file.Path arquivo = get();
+                    if (arquivo == null) return;
+                    javax.swing.ImageIcon icone = ImagemCapa.carregarQuadrado(arquivo.toFile(), 120);
+                    if (icone == null) return;
+
+                    capa.removeAll();
+                    capa.add(new JLabel(icone));
+                    capa.revalidate();
+                    capa.repaint();
+                } catch (Exception e) {
+                    System.err.println("Não foi possível carregar a capa: " + e.getMessage());
+                }
+            }
+        }.execute();
     }
 
     private JPanel criarInfoENomeComBotoes() {
@@ -257,6 +289,9 @@ public class TelaPlaylist extends JFrame {
                 javax.swing.JOptionPane.YES_NO_OPTION);
         if (resposta != javax.swing.JOptionPane.YES_OPTION) return;
 
+        int indiceRemovido = musicas.indexOf(musica);
+        barraReprodutor.pararSe(musica);
+
         try {
             musica.deletar();
         } catch (Exception ex) {
@@ -269,10 +304,10 @@ public class TelaPlaylist extends JFrame {
         }
 
         musicas.remove(musica);
+        barraReprodutor.ajustarIndiceAposRemocao(indiceRemovido);
         quantidadeLabel.setText(musicas.size() + " músicas");
         recarregarListaMusicas();
     }
-// --- músicas ---
     private JScrollPane criarListaMusicas() {
         JPanel lista = new JPanel();
         lista.setLayout(new BoxLayout(lista, BoxLayout.Y_AXIS));
@@ -289,7 +324,6 @@ public class TelaPlaylist extends JFrame {
         return scroll;
     }
 
-    /** Reconstrói a lista de músicas exibida (chamado após editar uma música). */
     private void recarregarListaMusicas() {
         conteudo.remove(scrollMusicas);
         scrollMusicas = criarListaMusicas();
