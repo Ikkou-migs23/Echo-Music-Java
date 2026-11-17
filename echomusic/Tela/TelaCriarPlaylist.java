@@ -227,9 +227,9 @@ public class TelaCriarPlaylist extends JFrame {
 
     private void adicionarMusica() {
         JFileChooser seletor = new JFileChooser();
-        seletor.setDialogTitle("Selecionar Música (.mp3)");
+        seletor.setDialogTitle("Selecionar Música (.mp3 ou .wav)");
         seletor.setMultiSelectionEnabled(true);
-        seletor.setFileFilter(new FileNameExtensionFilter("Arquivos MP3", "mp3"));
+        seletor.setFileFilter(new FileNameExtensionFilter("Músicas (MP3 ou WAV)", "mp3", "wav"));
 
         if (seletor.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return;
 
@@ -251,7 +251,9 @@ public class TelaCriarPlaylist extends JFrame {
             try {
                 Path destino = copiarParaPastaMusicas(arquivo.toPath(), pastaMusicas);
                 String nomeMusica = removerExtensao(arquivo.getName());
-                musicasAdicionadas.add(new Musica(nomeMusica, destino.toString()));
+                String caminhoRelativo = Paths.get(System.getProperty("user.dir"))
+                        .relativize(destino).toString().replace('\\', '/');
+                musicasAdicionadas.add(new Musica(nomeMusica, caminhoRelativo));
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
                         "Erro ao copiar \"" + arquivo.getName() + "\":\n" + e.getMessage(),
@@ -367,28 +369,68 @@ public class TelaCriarPlaylist extends JFrame {
             return;
         }
 
-        try {
-            Playlist playlist = new Playlist();
-            playlist.setIdUsuario(Negocio.Sessao.getIdUsuario());
-            playlist.setNome(campoNome.getText().trim());
-            playlist.setMusicas(new ArrayList<>(musicasAdicionadas));
-            playlist.cadastrar();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                    "Não foi possível salvar a playlist:\n" + ex.getMessage(),
-                    "Erro de banco de dados",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        Playlist playlist = new Playlist();
+        playlist.setIdUsuario(Negocio.Sessao.getIdUsuario());
+        playlist.setNome(campoNome.getText().trim());
+        playlist.setMusicas(new ArrayList<>(musicasAdicionadas));
+        playlist.setCapaEscolhida(seletorCapa.getArquivoSelecionado());
 
-        JOptionPane.showMessageDialog(this,
-                "Playlist criada com sucesso!",
-                "Echo Music",
-                JOptionPane.INFORMATION_MESSAGE);
+        // O envio das músicas e da capa para a nuvem pode demorar: roda fora da thread da tela, com uma janela de progresso.
+        javax.swing.JDialog progresso = criarJanelaProgresso();
+        javax.swing.SwingWorker<Void, Void> tarefa = new javax.swing.SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                playlist.cadastrar();
+                return null;
+            }
 
-        dispose();
-        new TelaPrincipal().setVisible(true);
+            @Override
+            protected void done() {
+                progresso.dispose();
+                try {
+                    get();
+                } catch (Exception ex) {
+                    Throwable causa = ex.getCause() != null ? ex.getCause() : ex;
+                    causa.printStackTrace();
+                    JOptionPane.showMessageDialog(TelaCriarPlaylist.this,
+                            "Não foi possível salvar a playlist:\n" + causa.getMessage(),
+                            "Erro ao salvar",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                JOptionPane.showMessageDialog(TelaCriarPlaylist.this,
+                        "Playlist criada com sucesso!",
+                        "Echo Music",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                dispose();
+                new TelaPrincipal().setVisible(true);
+            }
+        };
+        tarefa.execute();
+        progresso.setVisible(true); // modal: bloqueia a tela até o envio terminar
+    }
+
+    private javax.swing.JDialog criarJanelaProgresso() {
+        javax.swing.JDialog janela = new javax.swing.JDialog(this, "Echo Music", true);
+        janela.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        JLabel texto = new JLabel("Salvando a playlist e enviando os arquivos para a nuvem...");
+        texto.setBorder(new EmptyBorder(16, 20, 8, 20));
+
+        javax.swing.JProgressBar barra = new javax.swing.JProgressBar();
+        barra.setIndeterminate(true);
+
+        JPanel conteudo = new JPanel(new BorderLayout());
+        conteudo.setBorder(new EmptyBorder(0, 20, 16, 20));
+        conteudo.add(texto, BorderLayout.NORTH);
+        conteudo.add(barra, BorderLayout.SOUTH);
+
+        janela.add(conteudo);
+        janela.pack();
+        janela.setLocationRelativeTo(this);
+        return janela;
     }
 // --- campos ---
     private JLabel criarRotulo(String texto) {

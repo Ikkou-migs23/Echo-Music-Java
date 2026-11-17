@@ -52,9 +52,10 @@ public class TelaCadastro extends JFrame {
     }
 
     private void adicionarLogo(JPanel painel, GridBagConstraints gbc) {
-        JLabel logo = new JLabel("♫ Echo Music");
+        JLabel logo = new JLabel("Echo Music", Logo.criarIcone(80, 36), JLabel.CENTER);
         logo.setFont(Tema.FONTE_LOGO_GRANDE);
         logo.setForeground(Tema.ROXO);
+        logo.setIconTextGap(8);
 
         gbc.gridx = 0;
         gbc.gridy = 0;

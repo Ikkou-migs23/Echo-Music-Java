@@ -91,9 +91,10 @@ public class TelaLogin extends JFrame {
     }
 
     private void adicionarLogo(JPanel painel, GridBagConstraints gbc) {
-        JLabel logo = new JLabel("♫ Echo Music");
+        JLabel logo = new JLabel("Echo Music", Logo.criarIcone(80, 36), JLabel.CENTER);
         logo.setFont(Tema.FONTE_LOGO_GRANDE);
         logo.setForeground(Tema.ROXO);
+        logo.setIconTextGap(8);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -197,19 +198,9 @@ public class TelaLogin extends JFrame {
         JLabel esqueceu = new JLabel("Esqueceu a senha?");
         esqueceu.setFont(new Font("Arial", Font.PLAIN, 10));
 
-        JLabel redefinir = criarLinkAzul("Redefinir aqui");
-        redefinir.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JOptionPane.showMessageDialog(TelaLogin.this,
-                        "A redefinição de senha estará disponível em breve.",
-                        "Echo Music",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
+        
 
-        linha.add(esqueceu);
-        linha.add(redefinir);
+        
 
         gbc.gridy = 9;
         gbc.fill = GridBagConstraints.NONE;

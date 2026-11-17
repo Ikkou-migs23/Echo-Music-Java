@@ -22,6 +22,7 @@ public class TelaPerfil extends JFrame {
     private CampoTextoPlaceholder campoNome;
     private CampoSenhaPlaceholder campoNovaSenha;
     private CampoSenhaPlaceholder campoConfirmarSenha;
+    private SeletorImagem seletorFoto;
 
     public TelaPerfil() {
         setTitle("Echo Music - Perfil");
@@ -113,8 +114,9 @@ public class TelaPerfil extends JFrame {
         titulo.setForeground(Tema.TEXTO);
         titulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        SeletorImagem seletorFoto = new SeletorImagem("FOTO", LADO_FOTO);
+        seletorFoto = new SeletorImagem("FOTO", LADO_FOTO);
         seletorFoto.setAlignmentX(Component.LEFT_ALIGNMENT);
+        carregarFotoAtual();
 
         JLabel ajuda = new JLabel("Clique na foto para alterar");
         ajuda.setFont(Tema.FONTE_TEXTO_PEQUENA);
@@ -213,9 +215,8 @@ public class TelaPerfil extends JFrame {
         Negocio.Usuario atualizado = new Negocio.Usuario();
         atualizado.setId(logado.getId());
         atualizado.setUsuario(novoNome);
-        // senha em branco = mantém a senha atual
         atualizado.setSenha(novaSenha.isEmpty() ? logado.getSenha() : novaSenha);
-
+        atualizado.setFotoNuvem(logado.getFotoNuvem());
         try {
             atualizado.alterar();
         } catch (java.sql.SQLIntegrityConstraintViolationException ex) {
@@ -237,10 +238,97 @@ public class TelaPerfil extends JFrame {
         campoNovaSenha.setText("");
         campoConfirmarSenha.setText("");
 
+        java.io.File novaFoto = seletorFoto.getArquivoSelecionado();
+        if (novaFoto != null) {
+            salvarFoto(atualizado, novaFoto);
+            return;
+        }
+
         JOptionPane.showMessageDialog(this,
                 "Alterações salvas com sucesso!",
                 "Echo Music",
                 JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void carregarFotoAtual() {
+        Negocio.Usuario logado = Negocio.Sessao.getUsuario();
+        if (logado == null) return;
+
+        new javax.swing.SwingWorker<java.nio.file.Path, Void>() {
+            @Override
+            protected java.nio.file.Path doInBackground() throws Exception {
+                return logado.arquivoFoto();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    java.nio.file.Path foto = get();
+                    if (foto != null) {
+                        seletorFoto.mostrarImagem(foto.toFile());
+                    }
+                } catch (Exception ex) {
+                    System.err.println("Não foi possível carregar a foto de perfil: " + ex.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    private void salvarFoto(Negocio.Usuario usuario, java.io.File novaFoto) {
+        javax.swing.JDialog progresso = criarJanelaProgresso("Salvando a foto de perfil...");
+
+        javax.swing.SwingWorker<Void, Void> tarefa = new javax.swing.SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                usuario.salvarFoto(novaFoto);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                progresso.dispose();
+                try {
+                    get();
+                } catch (Exception ex) {
+                    Throwable causa = ex.getCause() != null ? ex.getCause() : ex;
+                    causa.printStackTrace();
+                    JOptionPane.showMessageDialog(TelaPerfil.this,
+                            "Nome e senha foram salvos, mas não foi possível salvar a foto:\n" + causa.getMessage(),
+                            "Erro ao salvar a foto",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                seletorFoto.limparSelecao();
+                JOptionPane.showMessageDialog(TelaPerfil.this,
+                        "Alterações salvas com sucesso!",
+                        "Echo Music",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        };
+        tarefa.execute();
+        progresso.setVisible(true);
+    }
+
+    private javax.swing.JDialog criarJanelaProgresso(String mensagem) {
+        javax.swing.JDialog janela = new javax.swing.JDialog(this, "Echo Music", true);
+        janela.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        JLabel texto = new JLabel(mensagem);
+        texto.setBorder(new javax.swing.border.EmptyBorder(16, 20, 8, 20));
+
+        javax.swing.JProgressBar barra = new javax.swing.JProgressBar();
+        barra.setIndeterminate(true);
+
+        JPanel conteudo = new JPanel(new BorderLayout());
+        conteudo.setBorder(new javax.swing.border.EmptyBorder(0, 20, 16, 20));
+        conteudo.add(texto, BorderLayout.NORTH);
+        conteudo.add(barra, BorderLayout.SOUTH);
+
+        janela.add(conteudo);
+        janela.pack();
+        janela.setLocationRelativeTo(this);
+        return janela;
     }
 
     private CampoTextoPlaceholder adicionarCampoTexto(JPanel painel, String rotuloTexto, String placeholder) {
