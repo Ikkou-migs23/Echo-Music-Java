@@ -3,7 +3,11 @@ package Tela;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -40,13 +44,42 @@ public class SeletorImagem extends JButton {
             return;
         }
 
-        arquivoSelecionado = seletor.getSelectedFile();
+        File escolhido = seletor.getSelectedFile();
+        if (!exibir(escolhido)) {
+            JOptionPane.showMessageDialog(this,
+                    "O arquivo escolhido não é uma imagem válida (use PNG, JPG, GIF ou BMP).",
+                    "Imagem inválida",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-        ImageIcon original = new ImageIcon(arquivoSelecionado.getAbsolutePath());
-        Image redimensionada = original.getImage().getScaledInstance(lado, lado, Image.SCALE_SMOOTH);
+        arquivoSelecionado = escolhido;
+    }
 
-        setText("");
-        setIcon(new ImageIcon(redimensionada));
+    public void mostrarImagem(File arquivo) {
+        exibir(arquivo);
+    }
+
+    public void limparSelecao() {
+        arquivoSelecionado = null;
+    }
+
+    private boolean exibir(File arquivo) {
+        try {
+            BufferedImage imagem = ImageIO.read(arquivo);
+            if (imagem == null) return false;
+
+            int menor = Math.min(imagem.getWidth(), imagem.getHeight());
+            BufferedImage quadrada = imagem.getSubimage(
+                    (imagem.getWidth() - menor) / 2, (imagem.getHeight() - menor) / 2, menor, menor);
+            Image redimensionada = quadrada.getScaledInstance(lado, lado, Image.SCALE_SMOOTH);
+
+            setText("");
+            setIcon(new ImageIcon(redimensionada));
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public File getArquivoSelecionado() {

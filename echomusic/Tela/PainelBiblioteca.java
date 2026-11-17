@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
 import Negocio.Playlist;
 
@@ -82,7 +83,6 @@ public class PainelBiblioteca extends JPanel {
 
         return painel;
     }
-// --- filtros ---
     private JPanel criarFiltros() {
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         filtros.setBackground(Tema.FUNDO);
@@ -118,24 +118,46 @@ public class PainelBiblioteca extends JPanel {
         ));
         return combo;
     }
-// --- grade ---
     private JPanel criarCards() {
         JPanel cards = new JPanel(new GridLayout(0, COLUNAS_GRADE, ESPACAMENTO_GRADE, ESPACAMENTO_GRADE));
         cards.setBackground(Tema.FUNDO);
 
         for (Playlist playlist : playlists) {
             String quantidadeTexto = playlist.getMusicas().size() + " músicas";
-            cards.add(new CardPlaylist(
+            CardPlaylist card = new CardPlaylist(
                     playlist.getNome(),
                     quantidadeTexto,
                     playlist.getCor(),
                     playlist.getTextoCapa(),
                     () -> aoAbrirPlaylist.accept(playlist)
-            ));
+            );
+            cards.add(card);
+            carregarCapa(playlist, card);
         }
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(Tema.FUNDO);
         wrapper.add(cards, BorderLayout.NORTH);
         return wrapper;
+    }
+
+    private void carregarCapa(Playlist playlist, CardPlaylist card) {
+        if (playlist.getCapaNuvem() == null || playlist.getCapaNuvem().isBlank()) return;
+
+        new SwingWorker<java.nio.file.Path, Void>() {
+            @Override
+            protected java.nio.file.Path doInBackground() throws Exception {
+                return playlist.arquivoCapa();
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    java.nio.file.Path capa = get();
+                    if (capa != null) card.mostrarImagemCapa(capa.toFile());
+                } catch (Exception e) {
+                    System.err.println("Não foi possível carregar a capa de \"" + playlist.getNome() + "\": " + e.getMessage());
+                }
+            }
+        }.execute();
     }
 }
