@@ -18,6 +18,10 @@ import javax.swing.JPanel;
 
 public class CardPlaylist extends JPanel {
 
+    private static final int LADO_CAPA = 65;
+
+    private JPanel painelCapa;
+
     public CardPlaylist(String nome, String quantidade, Color cor, String textoCapa, Runnable aoClicar) {
         setLayout(new BorderLayout(8, 0));
         setPreferredSize(new Dimension(245, 85));
@@ -28,7 +32,8 @@ public class CardPlaylist extends JPanel {
         ));
         setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        add(criarCapa(cor, textoCapa), BorderLayout.WEST);
+        painelCapa = criarCapa(cor, textoCapa);
+        add(painelCapa, BorderLayout.WEST);
         add(criarInformacoes(nome, quantidade), BorderLayout.CENTER);
 
         addMouseListener(new MouseAdapter() {
@@ -54,14 +59,28 @@ public class CardPlaylist extends JPanel {
         capa.setPreferredSize(new Dimension(65, 65));
         capa.setBackground(cor);
 
-        JLabel texto = new JLabel(
-                "<html><center>" + textoCapa.replace("\n", "<br>") + "</center></html>"
-        );
-        texto.setForeground(Tema.BRANCO);
-        texto.setFont(Tema.FONTE_CARD_CAPA);
-        capa.add(texto);
+        if (Logo.temTexto(textoCapa)) {
+            JLabel texto = new JLabel(
+                    "<html><center>" + textoCapa.replace("\n", "<br>") + "</center></html>"
+            );
+            texto.setForeground(Tema.BRANCO);
+            texto.setFont(Tema.FONTE_CARD_CAPA);
+            capa.add(texto);
+        } else {
+            capa.add(new JLabel(Logo.criarIcone(50, 50)));
+        }
 
         return capa;
+    }
+
+    public void mostrarImagemCapa(java.io.File arquivo) {
+        javax.swing.ImageIcon icone = ImagemCapa.carregarQuadrado(arquivo, LADO_CAPA);
+        if (icone == null) return;
+
+        painelCapa.removeAll();
+        painelCapa.add(new JLabel(icone));
+        painelCapa.revalidate();
+        painelCapa.repaint();
     }
 
     private JPanel criarInformacoes(String nome, String quantidade) {
