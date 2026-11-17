@@ -47,9 +47,10 @@ public class BarraLateral extends JPanel {
         JPanel painel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 10));
         painel.setBackground(Tema.FUNDO);
 
-        JLabel logo = new JLabel("♫ Echo Music");
+        JLabel logo = new JLabel("Echo Music", Logo.criarIcone(36, 24), JLabel.LEFT);
         logo.setFont(Tema.FONTE_LOGO);
         logo.setForeground(Tema.ROXO);
+        logo.setIconTextGap(6);
 
         painel.add(logo);
         return painel;
