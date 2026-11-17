@@ -105,11 +105,6 @@ A aplicação busca realizar tarefas como:
 <td>Possibilidade de adicionar músicas à aplicação.</td>
 </tr>
 
-<tr>
-<td>💾 <strong>Persistência</strong></td>
-<td>Armazenamento local das informações.</td>
-</tr>
-
 </table>
 
 ---
@@ -142,23 +137,3 @@ Cada playlist pode possuir:
 - 🏷️ Categoria;
 - 🖼️ Imagem de capa;
 - 🎵 Músicas.
-
-### Exemplo de organização:
-
-```text
-📂 Minhas Playlists
-│
-├── 🎵 Estudos
-│   ├── Música 01
-│   ├── Música 02
-│   └── Música 03
-│
-├── 🎵 Treino
-│   ├── Música 04
-│   ├── Música 05
-│   └── Música 06
-│
-└── 🎵 Favoritas
-    ├── Música 07
-    ├── Música 08
-    └── Música 09
